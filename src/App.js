@@ -1,26 +1,28 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Provider, connect } from 'react-redux';
+import { createStore } from 'redux';
+import Header from './components/Header';
+import Body from './components/Body';
+import Footer from './components/Footer';
+import reducers from './reducers';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  state = { title: 'Purwadhika' }
+  render() {
+    return(
+      <div>
+        <Provider store={createStore(reducers)}>
+          <Header text={this.state.title} />
+          <Body>
+            <h2>{this.state.title} 1</h2>
+            <h2>{this.state.title} 2</h2>
+            <h2>{this.state.title} 3</h2>
+          </Body>
+          <Footer text={this.state.title} />
+        </Provider>
+      </div>
+    )
+  }
 }
 
 export default App;
