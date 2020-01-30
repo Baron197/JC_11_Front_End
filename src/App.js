@@ -1,28 +1,30 @@
 import React from 'react';
-import { Provider, connect } from 'react-redux';
-import { createStore } from 'redux';
+import { connect } from 'react-redux';
 import Header from './components/Header';
 import Body from './components/Body';
 import Footer from './components/Footer';
-import reducers from './reducers';
 
 class App extends React.Component {
-  state = { title: 'Purwadhika' }
+  // state = { title: 'Purwadhika' }
   render() {
     return(
-      <div>
-        <Provider store={createStore(reducers)}>
-          <Header text={this.state.title} />
+      <div>  
+          <Header />
           <Body>
-            <h2>{this.state.title} 1</h2>
-            <h2>{this.state.title} 2</h2>
-            <h2>{this.state.title} 3</h2>
+            <h2>{this.props.judul} 1</h2>
+            <h2>{this.props.judul} 2</h2>
+            <h2>{this.props.judul} 3</h2>
           </Body>
-          <Footer text={this.state.title} />
-        </Provider>
+          <Footer text={this.props.judul} />
       </div>
     )
   }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+    return {
+        judul: state.title
+    }
+}
+
+export default connect(mapStateToProps)(App);

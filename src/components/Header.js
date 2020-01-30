@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 class Header extends React.Component {
     render() {
@@ -10,4 +11,12 @@ class Header extends React.Component {
     }
 }
 
-export default Header;
+const mapStateToProps = ({ title }) => {
+    return {
+        text: title
+    }
+}
+
+// this.props = { ...this.props, ...objdarimapstatetoprops}
+
+export default connect(mapStateToProps)(Header);
