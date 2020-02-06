@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { ubahTitle, getProducts } from '../actions';
 import '../styles/Body.css';
+import Category from './Category';
 
 class Body extends React.Component {
     state = { titleganti: 'cor' }
@@ -38,6 +39,7 @@ class Body extends React.Component {
     render() {
         return (
             <div style={{ border: '1px solid black', margin: '20px', padding: '20px' }}>
+                <Category />
                 <input type="text" value={this.state.titleganti} onChange={this.onInputTitleChange} /> 
                 <input type="button" value="Ubah Title" onClick={this.onButtonUbahTitleClick}/>
                 {this.props.children}
