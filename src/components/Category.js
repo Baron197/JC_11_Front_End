@@ -74,7 +74,7 @@ class Category extends React.Component {
         try {
             if(window.confirm('Are you sure to update?')) {
                 var res = await axios.put(API_URL_1 + `/categories/${this.state.editedId}`, {
-                    parentId: this.state.editParentId,
+                    parentId: this.state.editParentId === 0 ? null : this.state.editParentId,
                     category: this.state.editNamaCategory
                 })
                 console.log(res.data)
