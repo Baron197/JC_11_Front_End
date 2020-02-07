@@ -3,7 +3,14 @@ import axios from 'axios';
 import { API_URL_1 } from '../helpers/apiurl';
 
 class Category extends React.Component {
-    state = { listCategory: [], addNamaCategory: '', addParentId: 0 }
+    state = { 
+        listCategory: [], 
+        addNamaCategory: '', 
+        addParentId: 0, 
+        editedId: 0,
+        editNamaCategory: '', 
+        editParentId: 0
+    }
 
     componentDidMount() {
        this.getListCategory()
@@ -20,7 +27,8 @@ class Category extends React.Component {
             this.setState({ 
                 listCategory: res.data,
                 addNamaCategory: '',
-                addParentId: 0
+                addParentId: 0,
+                editedId: 0
             })
         }).catch((err) => {
             console.log(err.response)
@@ -62,15 +70,77 @@ class Category extends React.Component {
         }
     }
 
+    onBtnSaveClick = async () => {
+        try {
+            if(window.confirm('Are you sure to update?')) {
+                var res = await axios.put(API_URL_1 + `/categories/${this.state.editedId}`, {
+                    parentId: this.state.editParentId,
+                    category: this.state.editNamaCategory
+                })
+                console.log(res.data)
+                this.getListCategory()
+            }    
+        } catch(err) {
+            console.log(err.response.data)
+        }
+    }
+
     renderListCategory = () => {
         return this.state.listCategory.map((item, index) => {
+            if(this.state.editedId !== item.id) {
+                return (
+                    <tr key={index}>
+                        <td>{item.id}</td>
+                        <td>{item.categorychild}</td>
+                        <td>{item.categoryparent}</td>
+                        <td>
+                            <input 
+                                type="button" 
+                                value="Edit" 
+                                onClick={() => this.setState({ 
+                                    editedId: item.id,
+                                    editNamaCategory: item.categorychild,
+                                    editParentId: item.parentId
+                                })} 
+                            />
+                        </td>
+                        <td>
+                            <input type="button" value="Delete" onClick={() => this.onBtnDeleteClick(item.id)} />
+                        </td>
+                    </tr>
+                )
+            }
+
             return (
                 <tr key={index}>
                     <td>{item.id}</td>
-                    <td>{item.category}</td>
-                    <td>{item.parentId}</td>
                     <td>
-                        <input type="button" value="Delete" onClick={() => this.onBtnDeleteClick(item.id)} />
+                        <input 
+                            type="text" 
+                            value={this.state.editNamaCategory} 
+                            onChange={(e) => this.setState({ editNamaCategory: e.target.value })}
+                        />
+                    </td>
+                    <td>
+                        <select
+                            value={this.state.editParentId}
+                            onChange={(e) => this.setState({ editParentId: parseInt(e.target.value) })}
+                        >
+                            <option value={0}>-- Pilih Category --</option>
+                            {this.renderListPilihanParentCat()}
+                        </select>
+                    </td>
+                    <td>
+                        <input 
+                            type="button" 
+                            value="Cancel" 
+                            onClick={() => this.setState({ 
+                                editedId: 0
+                            })} 
+                        />
+                    </td>
+                    <td>
+                        <input type="button" value="Save" onClick={this.onBtnSaveClick} />
                     </td>
                 </tr>
             )
@@ -80,7 +150,7 @@ class Category extends React.Component {
     renderListPilihanParentCat = () => {
         return this.state.listCategory.map((item) => {
             return (
-                <option value={item.id}>{item.category}</option>
+                <option value={item.id}>{item.categorychild}</option>
             )
         })
     }
@@ -93,6 +163,7 @@ class Category extends React.Component {
                         <th>Id</th>
                         <th>Category</th>
                         <th>Parent Category</th>
+                        <th />
                         <th />
                     </tr>
                 </thead>
@@ -122,6 +193,7 @@ class Category extends React.Component {
                         <td>
                             <input type="button" value="Add" onClick={this.onButtonAddClick} />
                         </td>
+                        <td />
                     </tr>
                 </tfoot>
             </table>
